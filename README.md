@@ -18,7 +18,7 @@ First, download the `dmc_vision_benchmark` repository from GitHub:
 
 ```bash
 $ DMC_VIS_BENCH_DIR=~/dmc_vision_benchmark
-$ git clone https://github.com/google-deepmind/dmc_vision_benchmark.git $DMC_VIS_BENCH_DIR
+$ git clone git@github.com:google-deepmind/dmc_vision_benchmark.git $DMC_VIS_BENCH_DIR
 ```
 
 ### Download the datasets
