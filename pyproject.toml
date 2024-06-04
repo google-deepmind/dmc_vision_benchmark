@@ -1,0 +1,75 @@
+# Copyright 2024 DeepMind Technologies Limited.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "dmc_vision_benchmark"
+dynamic = ["version"]
+description = "Code for the paper 'DMC-VB: A Benchmark for Representation Learning for Control with Visual Distractors'"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = "~=3.11.0"
+authors = [
+    {name = "Google DeepMind", email = "laplace-team@google.com"},
+]
+keywords = [
+    "python",
+    "machine learning",
+    "reinforcement-learning",
+]
+classifiers = [
+    "Environment :: Console",
+    "Programming Language :: Python",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Intended Audience :: Science/Research",
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: Apache Software License",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "absl-py~=2.0",
+    "chex~=0.1.85",
+    "dm_env==1.6",
+    "dm-tree~=0.1.8",
+    "dm-control~=1.0.18",
+    "dm-reverb-nightly~=0.15.0.dev20240214",
+    "einops~=0.8.0",
+    "etils~=1.7",
+    "flax~=0.8.3",
+    "jax~=0.4.25",
+    "kauldron @ git+https://github.com/google-research/kauldron@d5ce3022c180e79dd2f742cfea69e1c2df2c5e3f",
+    "mediapy~=1.2.0",
+    "ml-collections @ git+https://github.com/google/ml_collections@4822113d126cac20983281e4f4bb069388ca4275",
+    "numpy~=1.26",
+    "optax~=0.2.2",
+    "orbax-checkpoint~=0.5.0",
+    "rlds~=0.1.8",
+    "tensorflow~=2.16.0",
+    "tensorflow-datasets~=4.9.4",
+    "tqdm~=4.66",
+    "typeguard @ git+https://github.com/agronholm/typeguard@0dd7f7510b7c694e66a0d17d1d58d185125bad5d",
+]
+
+[project.urls]
+homepage = "https://github.com/google-deepmind/dmc_vision_benchmark"
+repository = "https://github.com/google-deepmind/dmc_vision_benchmark"
+
+[tool.setuptools.packages.find]
+include = ["CONTRIBUTING.md", "LICENSE", "README.md", "install_distracting_control.sh"]
