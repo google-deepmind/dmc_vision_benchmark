@@ -17,12 +17,12 @@
 import dataclasses
 import functools
 import os
-from typing import Any
+from typing import Any, Sequence
 
 import rlds
 import tensorflow_datasets as tfds
 
-import os
+from dmc_vision_benchmark.data import dmc_vb_info
 from dmc_vision_benchmark.data import preprocessing
 from dmc_vision_benchmark.data import tfds as kd_tfds
 
@@ -33,57 +33,99 @@ class DataLoader:
   eval_dataset: Any
   action_dim: int
   gt_state_dim: int
+  cameras: Sequence[str]
 
 
-def load_data(domain_name: str, **kwargs):
+def load_data(
+    domain_name: str,
+    target_hidden: bool,
+    train_split: str,
+    eval_split: str,
+    **kwargs,
+):
   """Returns a data loader for given domain."""
-  ds = make_ds(**kwargs, domain_name=domain_name, split='train[:95%]')
+  ds = make_ds(
+      domain_name=domain_name,
+      target_hidden=target_hidden,
+      split=train_split,
+      **kwargs,
+  )
   ds = ds.repeat()
   train_dataset = iter(tfds.as_numpy(ds))
 
-  ds = make_ds(**kwargs, domain_name=domain_name, split='train[95%:]')
+  ds = make_ds(
+      domain_name=domain_name,
+      target_hidden=target_hidden,
+      split=eval_split,
+      **kwargs,
+  )
   eval_dataset = tfds.as_numpy(ds)
 
-  if domain_name == 'walker':
-    action_dim = 6
-    gt_state_dim = 24
-  elif domain_name == 'cheetah':
-    action_dim = 6
-    gt_state_dim = 17
-  else:  # humanoid
-    action_dim = 21
-    gt_state_dim = 67
+  action_dim = dmc_vb_info.get_action_dim(domain_name)
+  gt_state_dim = dmc_vb_info.get_state_dim(domain_name)
+  cameras = dmc_vb_info.get_camera_fields(domain_name, target_hidden)
 
   return DataLoader(
       train_dataset=train_dataset,
       eval_dataset=eval_dataset,
       action_dim=action_dim,
       gt_state_dim=gt_state_dim,
+      cameras=cameras,
   )
 
 
-def path_to_episode_dir(
+def path_to_episode_dirs(
     dataset_dir: str,
     domain_name: str,
     task_name: str,
     policy_level: str,
     dynamic_distractors: bool,
     difficulty: str,
+    ant_fixed_seed: int | None = None,
 ) -> str:
   """Returns the directory paths containing the episodes."""
-  distractor_type = 'dynamic_' if dynamic_distractors else 'static_'
-  distractor_type = '' if difficulty == 'none' else distractor_type
-  return os.path.join(
-      dataset_dir,
-      f'{domain_name}_{task_name}',
-      policy_level,
-      f'{distractor_type}{difficulty}',
-  )
+
+  if domain_name == 'ant':
+    if difficulty != 'none':
+      raise ValueError('Difficult must be none for ant maze tasks.')
+    if task_name not in dmc_vb_info.ANT_MAZE_TASKS:
+      raise ValueError(f'task_name {task_name} not in ant maze tasks')
+
+    if ant_fixed_seed is None:
+      if policy_level not in ['expert', 'medium']:
+        raise ValueError('Only expert/medium data available for antmaze_random')
+      return os.path.join(
+          dataset_dir,
+          'antmaze_random',
+          task_name,
+          policy_level,
+      )
+    else:
+      if policy_level not in ['expert']:
+        raise ValueError('Only expert data available for antmaze_fixed')
+      return os.path.join(
+          dataset_dir,
+          'antmaze_fixed',
+          task_name,
+          str(ant_fixed_seed),
+      )
+
+  else:
+    distractor_type = 'dynamic_' if dynamic_distractors else 'static_'
+    distractor_type = '' if difficulty == 'none' else distractor_type
+    return os.path.join(
+        dataset_dir,
+        'locomotion',
+        f'{domain_name}_{task_name}',
+        policy_level,
+        f'{distractor_type}{difficulty}',
+    )
 
 
 def make_ds(
-    dataset_dir: str,
     domain_name: str,
+    target_hidden: bool,
+    dataset_dir: str,
     task_name: str,
     policy_level: str,
     dynamic_distractors: bool,
@@ -104,31 +146,55 @@ def make_ds(
     shuffle_buffer_size: int | None = 10_000,
     shuffle_files: bool = True,
     split: str = 'train',
+    ant_fixed_seed: int | None = None,
 ):
-  """Returns a data pipeline for given dataset."""
+  """Returns a mixed data pipeline for given DMC-VB dataset."""
+  policy_levels = policy_level.split('_')
+  splits = split.split('_')
+  if len(splits) == 1:
+    splits = splits * len(policy_levels)
 
-  policy_level = policy_level.split('_')
   data_dirs = []
-  for level in policy_level:
-    data_dir = path_to_episode_dir(
+  for policy_level in policy_levels:
+    data_dir = path_to_episode_dirs(
         dataset_dir=dataset_dir,
         domain_name=domain_name,
         task_name=task_name,
-        policy_level=level,
+        policy_level=policy_level,
         dynamic_distractors=dynamic_distractors,
         difficulty=difficulty,
+        ant_fixed_seed=ant_fixed_seed,
     )
-    # get directories for all seeds
-    seeds = os.listdir(data_dir)
-    data_dirs.extend([os.path.join(data_dir, seed) for seed in seeds])
+    data_dirs.append(data_dir)
 
-  dataset = kd_tfds.load_from_dir(
-      data_dir=data_dirs,  # Can't be a keyword or it breaks partial.
-      split=split,
-      episode_length=episode_length,
-      shuffle_buffer_size=shuffle_buffer_size,
-      shuffle_files=shuffle_files,
-  )
+  if len(splits) == 1:
+    # Load all data together
+    dataset = kd_tfds.load_from_dir(
+        data_dir=data_dirs,  # Can't be a keyword or it breaks partial.
+        split=splits[0],
+        episode_length=episode_length,
+        shuffle_buffer_size=shuffle_buffer_size,
+        shuffle_files=shuffle_files,
+    )
+  elif len(splits) == len(policy_levels):
+    dataset = None
+    for data_dir, split in zip(data_dirs, splits):
+      ds = kd_tfds.load_from_dir(
+          data_dir=data_dir,  # Can't be a keyword or it breaks partial.
+          split=split,
+          episode_length=episode_length,
+          shuffle_buffer_size=shuffle_buffer_size,
+          shuffle_files=shuffle_files,
+      )
+      if dataset is None:
+        dataset = ds
+      else:
+        dataset = dataset.concatenate(ds)
+  else:
+    raise ValueError(
+        'Split must be either a single split or the same number of splits as'
+        ' policy levels.'
+    )
 
   # Flatten by default
   dataset = rlds.transformations.map_steps(
@@ -149,6 +215,7 @@ def make_ds(
       frame_stack=frame_stack,
       nsteps_idm=nsteps_idm,
       sample_idm_step=sample_idm_step,
+      target_hidden=target_hidden,
   )
 
   # Apply transormations to each item as needed.
@@ -173,6 +240,7 @@ def get_transforms(
     frame_stack: int,
     nsteps_idm: int,
     sample_idm_step: int | None,
+    target_hidden: bool,
 ):
   """Returns a list of transforms to apply to the dataset."""
   # Process actions
@@ -186,7 +254,7 @@ def get_transforms(
       ),
       functools.partial(
           preprocessing.value_range,
-          keys='action',
+          keys='actions',
           vrange=actions_vrange,
           in_vrange=(-1.0, 1.0),
       ),
@@ -219,10 +287,9 @@ def get_transforms(
   # Process observations
   transforms += (
       functools.partial(
-          preprocessing.rename,
-          rename_dict={
-              'observation_pixels': 'obs',
-          },
+          preprocessing.transform_create_obs,
+          domain_name=domain_name,
+          target_hidden=target_hidden,
       ),
       functools.partial(
           preprocessing.value_range,

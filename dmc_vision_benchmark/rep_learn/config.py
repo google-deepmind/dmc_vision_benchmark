@@ -22,16 +22,16 @@ def get_config() -> ml_collections.ConfigDict:
 
   config = ml_collections.ConfigDict()
   config.model = "bc"
-  config.dataset = "dmc_vb"
   config.encode_dim = 64
   config.idm_step_encode_dim = 64
-  config.pretrained_model_id = 1  # optional pretrained model d
+  config.pretrained_model_id = 1  # optional pretrained model
+  config.try_to_restore = True  # in case training crashes
 
   config.save_to_folder = "/tmp/rep_learn"
 
   config.obs_preproc = ml_collections.ConfigDict()
   config.obs_preproc.frame_stack = 3
-  config.obs_preproc.nsteps_idm = 0
+  config.obs_preproc.nsteps_idm = 1
   config.obs_preproc.sample_idm_step = False
 
   config.learning = ml_collections.ConfigDict()
@@ -50,7 +50,10 @@ def get_config() -> ml_collections.ConfigDict:
   config.data.domain_name = "cheetah"
   config.data.task_name = "run"
   config.data.policy_level = "expert"
+  config.data.train_split = "train[:95%]"
+  config.data.eval_split = "train[95%:]"
   config.data.difficulty = "none"
+  config.data.target_hidden = False
   config.data.dynamic_distractors = True
   config.data.episode_length = 200
   config.data.batch_size = config.learning.batch_size
@@ -63,15 +66,21 @@ def get_config() -> ml_collections.ConfigDict:
   config.data.img_height = 64
   config.data.img_width = 64
   config.data.img_pad = 4
+  config.data.ant_fixed_seed = (
+      None  # seed for choosing fixed start/goal for ant maze
+  )
 
   config.online_eval = ml_collections.ConfigDict()
   # Path to the Kubric dataset
   config.online_eval.background_dataset_path = "/tmp/dmc_vision_bench_data/dmc_vision_benchmark/kubric_movi-d/"  # pylint: disable=line-too-long
-  config.online_eval.max_episode_length = 500
+  config.online_eval.max_episode_length = 500  # 1_000 for antmaze
   config.online_eval.action_repeats = 2
   config.online_eval.history_length = 1
   config.online_eval.num_online_runs = 30
   config.online_eval.background_dataset_videos = "val"
+  config.online_eval.ant_random_start_end = True
+  config.online_eval.propagate_seed_to_env = True
+  config.online_eval.render_camera = "pixels"  # lowres_top_camera for antmaze
 
   # As in https://arxiv.org/pdf/2106.06860
   config.td3_bc = ml_collections.ConfigDict()

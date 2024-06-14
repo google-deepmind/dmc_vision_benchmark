@@ -54,7 +54,7 @@ def create_dm_control_state(
     target_key: str = 'states',
     normalize: bool = True,
 ) -> Any:
-  """Create state for each VD4RL domain."""
+  """Create state for each domain."""
   to_concat = []
   zero_dim_state_fields = dmc_vb_info.get_zero_dim_state_fields(domain_name)
   for field in dmc_vb_info.get_state_fields(domain_name):
@@ -134,7 +134,6 @@ def value_range(
   Returns:
     Updated data with values in range.
   """
-
   def set_vrange(element):
     element = tf.cast(element, dtype=dtype)
 
@@ -343,4 +342,20 @@ def transform_for_idm(
   step_updated['obs'] = tf.gather(
       step['obs'], axis=0, indices=tf.range(frame_stack)
   )
+  return step_updated
+
+
+@tf.function
+def transform_create_obs(step, domain_name: str, target_hidden: bool) -> Any:
+  """Create single obs with camera channels for each domain."""
+  step_updated = step.copy()
+
+  camera_fields = dmc_vb_info.get_camera_fields(domain_name, target_hidden)
+  # This should be stacking along channels, not time slices
+  # Needs to match evaluation.
+  to_concat = []
+  for field in camera_fields:
+    to_concat.append(step[f'observation_{field}'])
+
+  step_updated['obs'] = tf.concat(to_concat, axis=-1)
   return step_updated

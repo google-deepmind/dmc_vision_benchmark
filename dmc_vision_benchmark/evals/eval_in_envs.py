@@ -197,7 +197,7 @@ class EnvRunner:
             break
 
     kd_context = jax.tree.map(
-        jnp.stack,
+        np.stack,
         kd_context,
         is_leaf=lambda x: isinstance(x, collections.deque),
     )

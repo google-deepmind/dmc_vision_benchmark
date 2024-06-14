@@ -14,7 +14,7 @@
 
 """Simple inverse model based on image encoder and latent inverse model."""
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from typing import Union
 
 import einops
@@ -42,11 +42,13 @@ class MLPMultiHeads(nn.Module):
   state_predictor: nn.Module | None
   idm_step_encoder: nn.Module | None
   action_encoder: nn.Module | None
-  forward_model: nn.Module | None
+  latent_forward_model: nn.Module | None
+  obs_decoder: nn.Module | None
   encode_dim: int
 
   # For online eval
   domain_name: str
+  cameras: Sequence[str]
   obs_vrange: tuple[float, float] = (0, 1)
   pass_state: bool = False
 
@@ -106,7 +108,7 @@ class MLPMultiHeads(nn.Module):
     future_obs_encoded = None
     if (
         actions is not None
-        and self.forward_model is not None
+        and self.latent_forward_model is not None
         and self.action_encoder is not None
     ):
       # Encode the action
@@ -116,13 +118,19 @@ class MLPMultiHeads(nn.Module):
       concat_embeddings = jnp.concatenate(
           [obs_encoded, action_encoded], axis=-1
       )
-      future_obs_encoded = self.forward_model(concat_embeddings)
+      future_obs_encoded = self.latent_forward_model(concat_embeddings)
+
+    # Step 6. Observation reconstruction
+    obs_decoded = None
+    if self.obs_decoder is not None:
+      obs_decoded = self.obs_decoder(obs_encoded)
 
     return {
         'pred_actions': pred_actions,
         'inv_model_actions': inv_model_actions,
         'pred_states': pred_states,
         'pred_future_obs_encoded': future_obs_encoded,
+        'obs_decoded': obs_decoded,
     }
 
   def get_future_obs_encoded(
@@ -147,7 +155,11 @@ class MLPMultiHeads(nn.Module):
       obs = get_state_input(observation_history, self.domain_name)
       obs = normalize_state(obs, self.domain_name)
     else:
-      obs = get_rgb_normed(observation_history, self.obs_vrange)
+      obs = get_rgb_normed(
+          observation_history=observation_history,
+          vrange=self.obs_vrange,
+          cameras=self.cameras,
+      )
 
     model_output = self(obs=obs)
 
@@ -156,18 +168,25 @@ class MLPMultiHeads(nn.Module):
 
 def get_rgb_normed(
     observation_history: Mapping[str, Array['...']],
-    obs_vrange: tuple[float, float],
+    vrange: tuple[float, float],
+    cameras: Sequence[str],
 ) -> Array['...']:
   """Returns the normalized rgb observations."""
-  # Process RGB
-  rgb = observation_history['pixels'][-1]
+  # Process RGB, take last timestep only as framestacking is done by the
+  # environment.
+  rgbs = [observation_history[camera][-1] for camera in cameras]
+
   # Add extra batch dimension
-  rgb = rgb[None]
-  if rgb.ndim == 5:
+  if rgbs[0].ndim == 4:
+    rgb = jnp.concatenate(rgbs, axis=-2)  # concatenate along channel dim
     # Stack frames along channel dim
-    rgb = einops.rearrange(rgb, 'b h w c n -> b n h w c')
+    rgb = einops.rearrange(rgb, 'h w c n -> n h w c')
+  else:
+    rgb = jnp.stack(rgbs, axis=-1)  # concatenate along channel dim
+
+  rgb = rgb[None]
   rgb_normed = rgb.astype(jnp.float32) / 255.0
-  rgb_normed = rgb_normed * (obs_vrange[1] - obs_vrange[0]) + obs_vrange[0]
+  rgb_normed = rgb_normed * (vrange[1] - vrange[0]) + vrange[0]
   return rgb_normed
 
 
@@ -190,7 +209,7 @@ def get_state_input(
   for state_field in state_fields:
     field = observation_history[state_field][-1]
     # Add an extra dimension to scalar fields
-    if state_field in ['height', 'head_height']:
+    if field.ndim == 1:
       field = [field]
     fields.append(jnp.array(field))
   # Concatenate

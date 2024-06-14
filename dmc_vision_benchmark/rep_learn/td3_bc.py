@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Implements a TD3+BC model from https://arxiv.org/pdf/2106.06860."""
+"""Implements a TD3-BC model from https://arxiv.org/pdf/2106.06860."""
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from typing import Any, Callable, Union
 
 from flax import linen as nn
@@ -26,10 +26,10 @@ from dmc_vision_benchmark.rep_learn import mlp_multiheads
 
 
 class TD3BC(nn.Module):
-  """TD3 + BC agent.
+  """TD3-BC agent.
 
   See https://arxiv.org/pdf/1802.09477 for TD3
-  and https://arxiv.org/pdf/2106.06860 for TD3 + BC.
+  and https://arxiv.org/pdf/2106.06860 for TD3-BC.
   """
 
   encode_dim: int
@@ -46,10 +46,11 @@ class TD3BC(nn.Module):
   noise_clipping: tuple[float, float]
   actions_vrange: tuple[float, float]
   discount: float
-  stop_gradient_obs_encoder: bool
+  stop_gradient_shared_obs_encoder: bool
 
   # Online eval params
   domain_name: str
+  cameras: Sequence[str]
   obs_vrange: tuple[float, float]
   pass_state: bool
 
@@ -87,7 +88,7 @@ class TD3BC(nn.Module):
       return obs
 
     obs_encoded = self.shared_obs_encoder(obs)
-    if self.stop_gradient_obs_encoder:
+    if self.stop_gradient_shared_obs_encoder:
       obs_encoded = jax.lax.stop_gradient(obs_encoded)
     return obs_encoded
 
@@ -212,6 +213,10 @@ class TD3BC(nn.Module):
       )
       obs = mlp_multiheads.normalize_state(obs, self.domain_name)
     else:
-      obs = mlp_multiheads.get_rgb_normed(observation_history, self.obs_vrange)
+      obs = mlp_multiheads.get_rgb_normed(
+          observation_history=observation_history,
+          vrange=self.obs_vrange,
+          cameras=self.cameras,
+      )
 
     return self(obs=obs)

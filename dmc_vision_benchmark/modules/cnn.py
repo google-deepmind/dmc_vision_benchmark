@@ -12,11 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Basic CNN model."""
+"""CNN model."""
 
 from collections.abc import Callable, Sequence
 from typing import Tuple
 
+import einops
 from flax import linen as nn
 from kauldron.typing import Array, Float, UInt8, typechecked  # pylint: disable=g-multiple-import,g-importing-member
 
@@ -47,9 +48,12 @@ class CNN(nn.Module):
   pool_window_size: int = 2
   pool_stride_size: int = 2
   downsample: str | None = 'avg'
+  use_deconv_layers: bool = False
+  upsample: Sequence[int] | None = None
   kernel_init: nn.initializers.Initializer = nn.initializers.lecun_normal()
   bias_init: nn.initializers.Initializer = nn.initializers.zeros
   activation_fn: Callable[[Array], Array] = nn.relu
+  activation_last_layer: bool = True
 
   @typechecked
   @nn.compact
@@ -72,23 +76,42 @@ class CNN(nn.Module):
     strides = (self.pool_stride_size, self.pool_stride_size)
     x = inputs
     for i in range(num_layers):
-      x = nn.Conv(
-          features=self.conv_channels[i],
-          kernel_size=self.kernel_sizes[i],
-          strides=self.strides[i],
-          name=f'conv_{i}',
-          kernel_init=self.kernel_init,
-          bias_init=self.bias_init,
-      )(x)
-      x = self.activation_fn(x)
-      if self.downsample is None:
-        continue
-      elif self.downsample == 'avg':
-        x = nn.avg_pool(x, window_shape=window_shape, strides=strides)
-      elif self.downsample == 'max':
-        x = nn.max_pool(x, window_shape=window_shape, strides=strides)
+      if not self.use_deconv_layers:
+        x = nn.Conv(
+            features=self.conv_channels[i],
+            kernel_size=self.kernel_sizes[i],
+            strides=self.strides[i],
+            name=f'conv_{i}',
+            kernel_init=self.kernel_init,
+            bias_init=self.bias_init,
+            padding='SAME',
+        )(x)
       else:
-        raise ValueError(f'Unknown downsample: {self.downsample}')
+        x = nn.ConvTranspose(
+            features=self.conv_channels[i],
+            kernel_size=self.kernel_sizes[i],
+            strides=self.strides[i],
+            name=f'conv_{i}',
+            kernel_init=self.kernel_init,
+            bias_init=self.bias_init,
+            padding='SAME',
+        )(x)
+
+      # Check whether we apply the activation function on the last layer
+      if i != num_layers - 1 or self.activation_last_layer:
+        x = self.activation_fn(x)
+
+      if self.downsample == 'avg':
+        x = nn.avg_pool(x, window_shape=window_shape, strides=strides)
+      if self.downsample == 'max':
+        x = nn.max_pool(x, window_shape=window_shape, strides=strides)
+      if self.upsample is not None:
+        x = einops.repeat(
+            x,
+            '... h w c -> ... (h rh) (w rw) c',
+            rh=self.upsample[i],
+            rw=self.upsample[i],
+        )
 
     return x
 
@@ -122,4 +145,26 @@ def get_idm_cnn() -> CNN:
       downsample=None,
       kernel_init=nn.initializers.orthogonal(),
       activation_fn=nn.gelu,
+  )
+
+
+def get_decoder_cnn(n_frames: int, n_cameras: int) -> CNN:  # pylint: disable=invalid-name
+  """Returns a CNN decoder.
+
+  Inspired from https://arxiv.org/pdf/1910.01741#page=12
+
+  Args:
+    n_frames: number of stacked frames
+    n_cameras: number of cameras used
+  """
+  out_channels = 3 * n_cameras * n_frames
+  return CNN(
+      conv_channels=(128, 64, 32, out_channels),
+      kernel_sizes=((3, 3), (3, 3), (3, 3), (3, 3)),
+      strides=((1, 1), (1, 1), (2, 2), (2, 2)),
+      use_deconv_layers=True,
+      downsample=None,
+      kernel_init=nn.initializers.orthogonal(),
+      activation_fn=nn.gelu,
+      activation_last_layer=False,  # no activation for the last layer
   )

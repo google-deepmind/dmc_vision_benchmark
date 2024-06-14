@@ -25,9 +25,13 @@ def train_bc_one_step(_):
   this_config = config.get_config()
   this_config.model = "bc"
   this_config.dataset = "dmc_vb"
+  this_config.data.domain_name = "cheetah"
+  this_config.data.task_name = "run"
+  this_config.data.policy_level = "expert"
+  this_config.data.difficulty = "none"
 
-  # Modify
-  this_config.online_eval.num_online_runs = 2
+  # One training step, one eval step
+  this_config.online_eval.num_online_runs = 1
   this_config.learning.num_iters = 1
   this_config.learning.checkpoint_interval = 1
   this_config.learning.eval_every = 10  # skip
