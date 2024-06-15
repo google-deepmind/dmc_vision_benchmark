@@ -30,8 +30,8 @@ In each cell, the first video is without distractors, the second is with static 
 Each video in the table is a single episode from a different data subset, corresponding to a given embodiment, behavioural policy level and distractor configuration.
 Each of the 36 data subsets contains 2000 episodes (or 1M steps).
 
- | Walker             |  Cheetah            | Humanoid
-:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+| | Walker |  Cheetah | Humanoid |
+| --| -- | -- | -- |
 Expert | <img src="assets/videos/locomotion/walker_expert_none_00.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/walker_expert_static_medium_01.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/walker_expert_dynamic_medium_02.gif" alt="drawing" width="100"/> | <img src="assets/videos/locomotion/cheetah_expert_none_00.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/cheetah_expert_static_medium_01.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/cheetah_expert_dynamic_medium_02.gif" alt="drawing" width="100"/> | <img src="assets/videos/locomotion/humanoid_expert_none_00.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/humanoid_expert_static_medium_01.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/humanoid_expert_dynamic_medium_02.gif" alt="drawing" width="100"/>
 Medium | <img src="assets/videos/locomotion/walker_medium_none_00.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/walker_medium_static_medium_01.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/walker_medium_dynamic_medium_02.gif" alt="drawing" width="100"/> | <img src="assets/videos/locomotion/cheetah_medium_none_00.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/cheetah_medium_static_medium_01.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/cheetah_medium_dynamic_medium_02.gif" alt="drawing" width="100"/> | <img src="assets/videos/locomotion/humanoid_medium_none_00.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/humanoid_medium_static_medium_01.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/humanoid_medium_dynamic_medium_02.gif" alt="drawing" width="100"/>
 Mixed | <img src="assets/videos/locomotion/walker_mixed_none_00.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/walker_mixed_static_medium_01.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/walker_mixed_dynamic_medium_02.gif" alt="drawing" width="100"/> | <img src="assets/videos/locomotion/cheetah_mixed_none_00.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/cheetah_mixed_static_medium_01.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/cheetah_mixed_dynamic_medium_02.gif" alt="drawing" width="100"/> | <img src="assets/videos/locomotion/humanoid_mixed_none_00.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/humanoid_mixed_static_medium_01.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/humanoid_mixed_dynamic_medium_02.gif" alt="drawing" width="100"/>
@@ -46,8 +46,8 @@ See the the overview image at the top for the 7 maze layouts and the different f
 Again each data subset contains 1M steps.
 
 
- | Emtpy             |  Single-obstacle  (x3)          | Multi-obstacle (x3)
-:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+| | Empty |  Single-obstacle (x3) | Multi-obstacle (x3) |
+| --| -- | -- | -- |
 Expert | <img src="assets/videos/ant_maze/empty7x7_expert_01.gif" alt="drawing" width="300"/> | <img src="assets/videos/ant_maze/easy7x7a_expert_04.gif" alt="drawing" width="300"/> | <img src="assets/videos/ant_maze/medium7x7a_expert_02.gif" alt="drawing" width="300"/>
 Medium | <img src="assets/videos/ant_maze/empty7x7_medium_00.gif" alt="drawing" width="300"/> | <img src="assets/videos/ant_maze/easy7x7a_medium_01.gif" alt="drawing" width="300"/> | <img src="assets/videos/ant_maze/medium7x7a_medium_03.gif" alt="drawing" width="300"/>
 
