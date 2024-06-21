@@ -13,7 +13,7 @@ Below is a visual overview of the dataset.
 
 <div align="center">
   <img src="assets/teaser.png"
-  width="80%">
+  width="90%">
 </div>
 
 
@@ -32,10 +32,10 @@ Each of the 36 data subsets contains 2000 episodes (or 1M steps).
 
 | | Walker |  Cheetah | Humanoid |
 | --| -- | -- | -- |
-Expert | <img src="assets/videos/locomotion/walker_expert_none_00.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/walker_expert_static_medium_01.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/walker_expert_dynamic_medium_02.gif" alt="drawing" width="100"/> | <img src="assets/videos/locomotion/cheetah_expert_none_00.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/cheetah_expert_static_medium_01.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/cheetah_expert_dynamic_medium_02.gif" alt="drawing" width="100"/> | <img src="assets/videos/locomotion/humanoid_expert_none_00.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/humanoid_expert_static_medium_01.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/humanoid_expert_dynamic_medium_02.gif" alt="drawing" width="100"/>
-Medium | <img src="assets/videos/locomotion/walker_medium_none_00.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/walker_medium_static_medium_01.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/walker_medium_dynamic_medium_02.gif" alt="drawing" width="100"/> | <img src="assets/videos/locomotion/cheetah_medium_none_00.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/cheetah_medium_static_medium_01.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/cheetah_medium_dynamic_medium_02.gif" alt="drawing" width="100"/> | <img src="assets/videos/locomotion/humanoid_medium_none_00.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/humanoid_medium_static_medium_01.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/humanoid_medium_dynamic_medium_02.gif" alt="drawing" width="100"/>
-Mixed | <img src="assets/videos/locomotion/walker_mixed_none_00.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/walker_mixed_static_medium_01.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/walker_mixed_dynamic_medium_02.gif" alt="drawing" width="100"/> | <img src="assets/videos/locomotion/cheetah_mixed_none_00.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/cheetah_mixed_static_medium_01.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/cheetah_mixed_dynamic_medium_02.gif" alt="drawing" width="100"/> | <img src="assets/videos/locomotion/humanoid_mixed_none_00.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/humanoid_mixed_static_medium_01.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/humanoid_mixed_dynamic_medium_02.gif" alt="drawing" width="100"/>
-Random | <img src="assets/videos/locomotion/walker_random_none_00.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/walker_random_static_medium_01.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/walker_random_dynamic_medium_02.gif" alt="drawing" width="100"/> | <img src="assets/videos/locomotion/cheetah_random_none_00.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/cheetah_random_static_medium_01.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/cheetah_random_dynamic_medium_02.gif" alt="drawing" width="100"/> | <img src="assets/videos/locomotion/humanoid_random_none_00.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/humanoid_random_static_medium_01.gif" alt="drawing" width="100"/> <img src="assets/videos/locomotion/humanoid_random_dynamic_medium_02.gif" alt="drawing" width="100"/>
+Expert | <img src="assets/videos/locomotion/walker_expert_none_00.gif" alt="drawing" width="70"/> <img src="assets/videos/locomotion/walker_expert_static_medium_01.gif" alt="drawing" width="70"/> <img src="assets/videos/locomotion/walker_expert_dynamic_medium_02.gif" alt="drawing" width="70"/> | <img src="assets/videos/locomotion/cheetah_expert_none_00.gif" alt="drawing" width="70"/> <img src="assets/videos/locomotion/cheetah_expert_static_medium_01.gif" alt="drawing" width="70"/> <img src="assets/videos/locomotion/cheetah_expert_dynamic_medium_02.gif" alt="drawing" width="70"/> | <img src="assets/videos/locomotion/humanoid_expert_none_00.gif" alt="drawing" width="70"/> <img src="assets/videos/locomotion/humanoid_expert_static_medium_01.gif" alt="drawing" width="70"/> <img src="assets/videos/locomotion/humanoid_expert_dynamic_medium_02.gif" alt="drawing" width="70"/>
+Medium | <img src="assets/videos/locomotion/walker_medium_none_00.gif" alt="drawing" width="70"/> <img src="assets/videos/locomotion/walker_medium_static_medium_01.gif" alt="drawing" width="70"/> <img src="assets/videos/locomotion/walker_medium_dynamic_medium_02.gif" alt="drawing" width="70"/> | <img src="assets/videos/locomotion/cheetah_medium_none_00.gif" alt="drawing" width="70"/> <img src="assets/videos/locomotion/cheetah_medium_static_medium_01.gif" alt="drawing" width="70"/> <img src="assets/videos/locomotion/cheetah_medium_dynamic_medium_02.gif" alt="drawing" width="70"/> | <img src="assets/videos/locomotion/humanoid_medium_none_00.gif" alt="drawing" width="70"/> <img src="assets/videos/locomotion/humanoid_medium_static_medium_01.gif" alt="drawing" width="70"/> <img src="assets/videos/locomotion/humanoid_medium_dynamic_medium_02.gif" alt="drawing" width="70"/>
+Mixed | <img src="assets/videos/locomotion/walker_mixed_none_00.gif" alt="drawing" width="70"/> <img src="assets/videos/locomotion/walker_mixed_static_medium_01.gif" alt="drawing" width="70"/> <img src="assets/videos/locomotion/walker_mixed_dynamic_medium_02.gif" alt="drawing" width="70"/> | <img src="assets/videos/locomotion/cheetah_mixed_none_00.gif" alt="drawing" width="70"/> <img src="assets/videos/locomotion/cheetah_mixed_static_medium_01.gif" alt="drawing" width="70"/> <img src="assets/videos/locomotion/cheetah_mixed_dynamic_medium_02.gif" alt="drawing" width="70"/> | <img src="assets/videos/locomotion/humanoid_mixed_none_00.gif" alt="drawing" width="70"/> <img src="assets/videos/locomotion/humanoid_mixed_static_medium_01.gif" alt="drawing" width="70"/> <img src="assets/videos/locomotion/humanoid_mixed_dynamic_medium_02.gif" alt="drawing" width="70"/>
+Random | <img src="assets/videos/locomotion/walker_random_none_00.gif" alt="drawing" width="70"/> <img src="assets/videos/locomotion/walker_random_static_medium_01.gif" alt="drawing" width="70"/> <img src="assets/videos/locomotion/walker_random_dynamic_medium_02.gif" alt="drawing" width="70"/> | <img src="assets/videos/locomotion/cheetah_random_none_00.gif" alt="drawing" width="70"/> <img src="assets/videos/locomotion/cheetah_random_static_medium_01.gif" alt="drawing" width="70"/> <img src="assets/videos/locomotion/cheetah_random_dynamic_medium_02.gif" alt="drawing" width="70"/> | <img src="assets/videos/locomotion/humanoid_random_none_00.gif" alt="drawing" width="70"/> <img src="assets/videos/locomotion/humanoid_random_static_medium_01.gif" alt="drawing" width="70"/> <img src="assets/videos/locomotion/humanoid_random_dynamic_medium_02.gif" alt="drawing" width="70"/>
 
 #### Ant maze tasks
 
@@ -75,13 +75,69 @@ $ git clone git@github.com:google-deepmind/dmc_vision_benchmark.git $DMC_VIS_BEN
 Next, download the dataset stored in the [dmc_vision_benchmark GCP bucket](https://console.cloud.google.com/storage/browser/dmc_vision_benchmark).
 You will need the gcloud CLI, which you can install by following the
 [instructions here](https://cloud.google.com/sdk/docs/install).
-The dataset is ~300GB.
 
 ```bash
 $ DATA_DIR=/tmp/dmc_vision_bench_data
 $ mkdir $DATA_DIR
-$ gcloud storage cp -r gs://dmc_vision_benchmark $DATA_DIR
 ```
+To download the full dataset (~1.6TB). Below we also provide commands to download subsets of the dataset.
+
+```bash
+$ gcloud storage cp -r gs://dmc_vision_benchmark $DATA_DIR  # full dataset (~950GB)
+```
+
+<details>
+<summary>Download locomotion data (up to ~260GB).</summary>
+Download license, README and Kubric videos that are used in locomotion evaluation environments.
+
+```bash
+$ mkdir -p $DATA_DIR/dmc_vision_benchmark/dmc_vision_benchmark
+$ gcloud storage cp -r gs://dmc_vision_benchmark/{LICENSE.txt,README.md,kubric_movi-d} $DATA_DIR/dmc_vision_benchmark
+```
+
+Download all locomotion data for all behavioral policy levels (~260GB)
+
+```bash
+$ gcloud storage cp -r gs://dmc_vision_benchmark/dmc_vision_benchmark/locomotion/ $DATA_DIR/dmc_vision_benchmark/dmc_vision_benchmark
+```
+
+Download locomotion data for a particular task, behavioral policy level and distractor setting (~7GB each).
+
+```bash
+$ LOCOMOTION_TASK=cheetah_run  # Options: walker_walk, cheetah_run, humanoid_walk
+$ BEHAVIORAL_POLICY=expert  # Options: expert, medium, mixed, random
+$ DISTRACTOR=dynamic_medium  # Options: dynamic_medium, static_medium, none
+$ mkdir -p $DATA_DIR/dmc_vision_benchmark/locomotion/$LOCOMOTION_TASK/$BEHAVIORAL_POLICY
+$ gcloud storage cp -r gs://dmc_vision_benchmark/dmc_vision_benchmark/locomotion/$LOCOMOTION_TASK/$BEHAVIORAL_POLICY/$DISTRACTOR $DATA_DIR/dmc_vision_benchmark/dmc_vision_benchmark/locomotion/$LOCOMOTION_TASK/$BEHAVIORAL_POLICY
+```
+</details>
+
+<details>
+<summary>Download ant maze data (up to ~1.4TB).</summary>
+Download license and README.
+
+```bash
+$ mkdir -p $DATA_DIR/dmc_vision_benchmark/dmc_vision_benchmark
+$ gcloud storage cp -r gs://dmc_vision_benchmark/{LICENSE.txt,README.md} $DATA_DIR/dmc_vision_benchmark
+```
+
+Download all ant maze data with random start and goal locations and visible goals (`antmaze_random_visible_goal` ~700GB) used in Benchmark 1. For Benchmark 3, you can download ant maze data with random start and goal locations and hidden goals for pretraining (`antmaze_random_hidden_goal` ~700GB) and fixed start and goal locations with hidden goals for finetuning (`antmaze_fixed_hidden_goal` ~16GB).
+
+```bash
+$ ANTMAZE_DATA=antmaze_random_visible_goal  # Options: antmaze_random_visible_goal, antmaze_random_hidden_goal, antmaze_fixed_hidden_goal
+$ gcloud storage cp -r gs://dmc_vision_benchmark/dmc_vision_benchmark/$ANTMAZE_DATA $DATA_DIR/dmc_vision_benchmark/dmc_vision_benchmark
+```
+
+Download smaller subsets of the ant maze data for a specific task and behavioral policy level (~50GB each).
+
+```bash
+$ ANTMAZE_DATA=antmaze_random_visible_goal  # Options: antmaze_random_visible_goal, antmaze_random_hidden_goal
+$ ANTMAZE_TASK=empty7x7  # Options: empty7x7, easy7x7a, easy7x7b, easy7x7c, medium7x7a, medium7x7b, medium7x7c
+$ BEHAVIORAL_POLICY=expert  # Options: expert, medium
+$ mkdir -p $DATA_DIR/dmc_vision_benchmark/$ANTMAZE_DATA/$ANTMAZE_TASK
+$ gcloud storage cp -r gs://dmc_vision_benchmark/dmc_vision_benchmark/$ANTMAZE_DATA/$ANTMAZE_TASK/$BEHAVIORAL_POLICY $DATA_DIR/dmc_vision_benchmark/dmc_vision_benchmark/$ANTMAZE_DATA/$ANTMAZE_TASK
+```
+</details>
 
 If you change `$DATA_DIR`, please adjust the paths in the
 [config file](https://github.com/google-deepmind/dmc_vision_benchmark/blob/main/dmc_vision_benchmark/rep_learn/config.py).
@@ -171,10 +227,9 @@ Given a pretrained visual encoder, our `DecoderTrainer` module in `dmc_vision_be
 
 ## Benchmarks
 
-We additionally include 3 minimal scripts in the `example` folder to mimic the 3 benchmark experiments in our paper.
-Each script only performs one training step and one evaluation step for each method.
-
-As longer runs are required to reproduce our results, we encourage the user to parallelize the different runs on their hardware.
+We include 3 minimal scripts in the `example` folder to reproduce the 3 benchmark experiments in our paper.
+Each script performs one training step and one evaluation step for each method in a large for loop.
+To reproduce our results, we encourage the user to parallelize the different methods on their hardware and increase the training and evaluation steps to 200k and 30 respectively.
 
 * `benchmark1.py` studies whether visual representation learning makes policies robust to distractors (on locomotion and ant maze datasets).
 

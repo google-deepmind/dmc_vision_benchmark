@@ -82,9 +82,9 @@ def path_to_episode_dirs(
     dynamic_distractors: bool,
     difficulty: str,
     ant_fixed_seed: int | None = None,
+    target_hidden: bool = False,
 ) -> str:
   """Returns the directory paths containing the episodes."""
-
   if domain_name == 'ant':
     if difficulty != 'none':
       raise ValueError('Difficult must be none for ant maze tasks.')
@@ -94,9 +94,10 @@ def path_to_episode_dirs(
     if ant_fixed_seed is None:
       if policy_level not in ['expert', 'medium']:
         raise ValueError('Only expert/medium data available for antmaze_random')
+      hidden = 'hidden_goal' if target_hidden else 'visible_goal'
       return os.path.join(
           dataset_dir,
-          'antmaze_random',
+          f'antmaze_random_{hidden}',
           task_name,
           policy_level,
       )
@@ -105,7 +106,7 @@ def path_to_episode_dirs(
         raise ValueError('Only expert data available for antmaze_fixed')
       return os.path.join(
           dataset_dir,
-          'antmaze_fixed',
+          'antmaze_fixed_hidden_goal',
           task_name,
           str(ant_fixed_seed),
       )
@@ -164,6 +165,7 @@ def make_ds(
         dynamic_distractors=dynamic_distractors,
         difficulty=difficulty,
         ant_fixed_seed=ant_fixed_seed,
+        target_hidden=target_hidden,
     )
     data_dirs.append(data_dir)
 

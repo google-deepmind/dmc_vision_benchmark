@@ -79,7 +79,7 @@ def get_state_std(domain_name: str) -> Sequence[float]:
   """Gets the std of the state over the dataset for given domain."""
   if domain_name not in DMC_VB_STATE_STATS:
     raise ValueError(f'Domain {domain_name} not in dataset.')
-  return np.array(DMC_VB_STATE_STATS[domain_name]['stddev']) + 1e-20
+  return np.maximum(np.array(DMC_VB_STATE_STATS[domain_name]['stddev']), 1e-3)
 
 
 def get_camera_fields(
